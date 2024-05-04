@@ -74,7 +74,15 @@ push @h_dirs, split ' ', $Config{libsdirs};
 push @h_dirs, qw(/include /usr/include /usr/local/include /usr/include/mach);
 @h_dirs = grep { -d $_ } @h_dirs;
 
+print STDERR '@h_dirs:', "\n";
+print STDERR "  $_\n" for @h_dirs;
+
 $h_files = find_h_files(@h_dirs);
+
+print STDERR '$h_files:', "\n";
+for (sort keys %$h_files) {
+    printf STDERR "  %-24s%s\n" => ($_, $h_files->{$_});
+}
 
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
