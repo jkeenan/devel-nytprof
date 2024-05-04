@@ -65,7 +65,6 @@ my $cpp = $Config{cpprun} || do {
 };
 
 print "Looking for header files and functions...\n";
-my $INCLUDE;
 
 my $h_files;
 my @h_dirs;
@@ -192,7 +191,7 @@ WriteMakefile(
     FUNCLIST => ['boot_Devel__NYTProf', 'boot_Devel__NYTProf__FileHandle'],
     EXE_FILES => ['bin/nytprofhtml', 'bin/flamegraph.pl', 'bin/nytprofcsv', 'bin/nytprofcalls', 'bin/nytprofcg', 'bin/nytprofmerge'],
     @man,
-    INC   => $INCLUDE,
+    INC   => undef,
     clean => {
         FILES => join(" ",
             "nytprof demo-out",
