@@ -44,6 +44,7 @@ GetOptions(
     'zlib!'     => \(my $opt_zlib=1),       # --nozlib to disallow use of zlib
     'gettime!'  => \(my $opt_gettime=1),    # --nogettime to disallow use of POSIX clock_gettime
     'machtime!' => \(my $opt_machtime=1),   # --nomachtime to disallow use of mac osx clock
+    'altlink=s'   => \(my $opt_altlink),    # additional linker arguments
 ) or exit 1;
 
 if (not defined $opt_assert) {
@@ -96,6 +97,10 @@ foreach (@hdr_match_lib) {
         push @libs, $libs if $libs;
         $mm_opts{DEFINE} .= " $define" if $define;
     }
+}
+
+if ($opt_altlink) {
+    push @libs, $opt_altlink;
 }
 
 if ($opt_assert or (not defined $opt_assert and $is_developer)) {
