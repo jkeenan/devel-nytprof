@@ -1,4 +1,5 @@
 \B\.git\b
+\B\.github\b
 ^MANIFEST\.
 ^Makefile$
 ^Makefile.old$

@@ -1,0 +1,87 @@
+name: CI
+
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
+    #schedule:
+    #    - cron: '42 5 * * 0'
+
+jobs:
+  test-in-docker:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl-version:
+          - '5.16'
+          - '5.30'
+          - '5.38'
+          - '5.42'
+          - 'latest'
+    container:
+      image: perldocker/perl-tester:${{ matrix.perl-version }}     # https://hub.docker.com/r/perldocker/perl-tester
+    name: Perl ${{ matrix.perl-version }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Show Perl Version
+        run: |
+          perl -V
+      - name: Regular tests
+        run: |
+            cpanm --installdeps --notest .
+            perl Makefile.PL
+            make
+            make test
+
+  test-on-native-os:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        perl:
+          - '5.30'
+          - '5.42'
+        #exclude:
+        #  - runner: windows-latest
+        #    perl: '5.40'
+
+    runs-on: ${{matrix.runner}}
+    name: OS ${{matrix.runner}} Perl ${{matrix.perl}}
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Set up perl
+      uses: shogo82148/actions-setup-perl@v1 # See https://github.com/shogo82148/actions-setup-perl
+      with:
+          perl-version: ${{ matrix.perl }}
+          distribution: ${{ ( matrix.runner == 'windows-latest' && 'strawberry' ) || 'default' }}
+
+    - name: Show Perl Version
+      run: |
+        perl -V
+
+    - name: Install Modules
+      run: |
+        cpanm -v
+        cpanm --installdeps --notest .
+
+    - name: Run tests on Linux and macOS
+      if: ${{ matrix.runner != 'windows-latest' }}
+      run: |
+        perl Makefile.PL
+        make
+        make test
+
+    - name: Run tests on Windows
+      if: ${{ matrix.runner == 'windows-latest' }}
+      run: |
+        perl Makefile.PL
+        gmake
+        gmake test
+
+
