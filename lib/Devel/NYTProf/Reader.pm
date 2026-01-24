@@ -135,7 +135,7 @@ sub output_dir {
     my ($self, $dir) = @_;
     return $self->{output_dir} unless defined($dir);
     if (!mkdir $dir) {
-        confess "Unable to create directory $dir: $!\n" if !$! =~ /exists/;
+        confess "Unable to create directory $dir: $!\n" if $! !~ /exists/;
     }
     $self->{output_dir} = $dir;
 }
