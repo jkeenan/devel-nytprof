@@ -2,7 +2,7 @@
 .gitignore
 .indent.pro
 .perltidyrc
-bin/nytflamegraph.pl
+bin/nytprofflamegraph
 bin/nytprofcalls
 bin/nytprofcg
 bin/nytprofcsv
