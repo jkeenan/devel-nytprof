@@ -4,7 +4,7 @@
 
 History of significant changes in Devel::NYTProf
 
-=head2 Changes in Devel::NYTProf 6.15 - TO COME
+=head2 Changes in Devel::NYTProf 6.15 - 31st Mar 2026
 
 Updated URL linking to Brendan Gregg's Flame Graph page; thanks to Paul
 Cochrane.
